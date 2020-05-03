@@ -20,22 +20,47 @@ interface FileProps {
 
 const Import: React.FC = () => {
   const [uploadedFiles, setUploadedFiles] = useState<FileProps[]>([]);
+  const [inputError, SetInputError] = useState('');
   const history = useHistory();
 
   async function handleUpload(): Promise<void> {
-    // const data = new FormData();
-
-    // TODO
-
     try {
-      // await api.post('/transactions/import', data);
+      console.log('Apertou o enviar');
+      Promise.all(
+        uploadedFiles.map(async fileToUpload => {
+          const data = new FormData();
+          data.append('file', fileToUpload.file);
+
+          await api.post('/transactions/import', data);
+        }),
+      ).then(element => {
+        setUploadedFiles([]);
+      });
     } catch (err) {
-      // console.log(err.response.error);
+      console.log(err.response.error);
     }
   }
 
   function submitFile(files: File[]): void {
-    // TODO
+    files.map(fileToUpload => {
+      // const { name, type, size } = fileToUpload;
+
+      if (fileToUpload.type !== 'text/csv') {
+        SetInputError('Permitido apenas arquivos CSV');
+      } else {
+        SetInputError('');
+
+        console.log(fileToUpload);
+
+        const upFile = {
+          file: fileToUpload,
+          name: fileToUpload.name,
+          readableSize: fileToUpload.size.toString(),
+        };
+
+        setUploadedFiles([...uploadedFiles, upFile]);
+      }
+    });
   }
 
   return (
@@ -48,11 +73,13 @@ const Import: React.FC = () => {
           {!!uploadedFiles.length && <FileList files={uploadedFiles} />}
 
           <Footer>
-            <p>
-              <img src={alert} alt="Alert" />
-              Permitido apenas arquivos CSV
-            </p>
-            <button onClick={handleUpload} type="button">
+            {inputError && (
+              <p>
+                <img src={alert} alt="Alert" />
+                inputError
+              </p>
+            )}
+            <button onClick={() => handleUpload()} type="button">
               Enviar
             </button>
           </Footer>
