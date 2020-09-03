@@ -41,7 +41,7 @@
     "yup": "^0.28.5"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "PORT=80 react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
