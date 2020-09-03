@@ -9,12 +9,25 @@ export default createGlobalStyle`
   }
 
   body {
-    background: #F0F2F5 ;
+    background: #E9EAEB ;
+    color: #FFF;
     -webkit-font-smoothing: antialiased
   }
 
   body, input, button {
-    font: 16px "Poppins", sans-serif;
+    font-family: "Roboto", serif;
+    font-size: 14px;
+  }
+
+  h1, h2, h3, h4, h5, h6, strong {
+    font-weight: 500;
+
+  }
+
+  span {
+    font-family: "Roboto", serif;
+    font-size: 12px;
+    color: #FFF;
   }
 
   button {
