@@ -7,6 +7,7 @@ import Select from '@material-ui/core/Select';
 import api from '../../services/api';
 
 import { useAuth } from '../../hooks/auth';
+import { useToast } from '../../hooks/toast';
 
 import logoImg from '../../assets/logo2.png';
 
@@ -40,6 +41,7 @@ interface AptoData {
 
 const CondonMenu: React.FC = () => {
   const history = useHistory();
+  const { addToast } = useToast();
 
   const { apto } = useParams();
 
@@ -69,11 +71,21 @@ const CondonMenu: React.FC = () => {
   }, []);
 
   const handleGoToVisitForm = (): void => {
-    history.push(`/condon-agend/${apto}`, {
-      aptoData,
-      moradorId,
-      moradorNome,
-    });
+    // verificar se o morador foi escolhido
+    if (!moradorNome) {
+      addToast({
+        type: 'error',
+        title: 'Identificação',
+        description:
+          'Identifique qual morador estará realizando o agendamento.',
+      });
+    } else {
+      history.push(`/condon-agend/${apto}`, {
+        aptoData,
+        moradorId,
+        moradorNome,
+      });
+    }
   };
 
   const handleChangeMorador = (e: ChangeEvent<{ value: unknown }>): void => {
