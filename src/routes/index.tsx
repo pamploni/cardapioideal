@@ -18,6 +18,7 @@ import SignUp from '../pages/SignUp';
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/" exact component={Menu} />
+    <Route path="/menu/:cliente_cname" component={Menu} />
     <Route path="/registrar" component={Registrar} />
 
     <Route path="/condon-menu/:apto" component={CondonMenu} />

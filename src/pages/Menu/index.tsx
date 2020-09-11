@@ -86,31 +86,35 @@ const Menu: React.FC = () => {
   const [selected, setSelected] = useState();
 
   useEffect(() => {
-    api.get('/menuideal').then(resp => {
-      // console.log(resp.data);
-      const itensData: ItemDTO[] = resp.data;
-      /* const grupoData: string[] = [
-        ...new Set(itensData.map((it: ItemDTO) => it.CARDAPIO_GRUPO)),
-      ]; */
-      const grupoSetData = new Set(
-        itensData.map((it: ItemDTO) => it.CARDAPIO_GRUPO),
-      );
-
-      const grupoData: GrupoDTO[] = [];
-
-      grupoSetData.forEach(ite => {
-        grupoData.push({ grupo: ite.toLowerCase() });
+    if (!cliente) {
+      api.get(`/clientes?cname=${cliente_cname}`).then(resp => {
+        setCliente(resp.data[0]);
       });
-      setItens(itensData);
-      setItensBusca(itensData);
-      // console.log(grupoData);
-      setGrupo(grupoData);
-    });
+    } else {
+      api.get(`/menuideal?cliente_id=${cliente.id}`).then(resp => {
+        // console.log(resp.data);
+        const itensData: ItemDTO[] = resp.data[0].cardapio;
 
-    api.get('/cliente').then(resp => {
-      setCliente(resp.data);
-    });
-  }, []);
+        const grupoSetData = new Set(
+          itensData.map((it: ItemDTO) => it.CARDAPIO_GRUPO),
+        );
+
+        const grupoData: GrupoDTO[] = [];
+
+        grupoSetData.forEach(ite => {
+          grupoData.push({ grupo: ite.toLowerCase() });
+        });
+        setItens(itensData);
+        setItensBusca(itensData);
+        // console.log(grupoData);
+        setGrupo(grupoData);
+      });
+
+      api.get('/cliente').then(resp => {
+        setCliente(resp.data);
+      });
+    }
+  }, [cliente]);
 
   const handleGrupoClick = (itemGrupo: string): void => {
     setItensBusca(
