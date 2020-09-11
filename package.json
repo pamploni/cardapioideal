@@ -17,6 +17,8 @@
     "date-fns": "^2.15.0",
     "filesize": "^6.1.0",
     "history": "^4.10.1",
+    "json-server": "^0.16.1",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.27.0",
     "polished": "^3.6.0",
     "qrcode.react": "^1.0.0",
@@ -27,12 +29,14 @@
     "react-day-picker": "^7.4.8",
     "react-dom": "^16.13.1",
     "react-dropzone": "^10.2.2",
+    "react-horizontal-scrolling-menu": "^0.7.7",
     "react-icons": "^3.10.0",
     "react-loading": "^2.0.3",
     "react-pro-sidebar": "^0.4.4",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "react-scroll-horizontal": "^1.6.4",
     "react-share": "^4.2.1",
     "react-spring": "^8.0.27",
     "styled-components": "^5.1.0",
@@ -41,7 +45,7 @@
     "yup": "^0.28.5"
   },
   "scripts": {
-    "start": "PORT=80 react-app-rewired start",
+    "start": "PORT=8080 react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"

@@ -6,9 +6,14 @@ import React, {
   useState,
 } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
+
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+
 import {
   FiArrowLeft,
   FiLock,
+  FiSearch,
   FiCamera,
   FiUser,
   FiEye,
@@ -21,11 +26,11 @@ import api from '../../services/api';
 import { useToast } from '../../hooks/toast';
 import { useAuth } from '../../hooks/auth';
 
-import { cpfMask } from '../../utils/formatValue';
+import { cpfMask, formatValue } from '../../utils/formatValue';
 
 import getValidationErrors from '../../utils/getValidationErrors';
 
-import logoImg from '../../assets/logo2.png';
+import imgBck from '../../assets/imgBck.jpeg';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -38,155 +43,362 @@ import {
   Header,
 } from './styles';
 
-interface SignInFormData {
-  email: string;
-  password: string;
+interface GrupoDTO {
+  grupo: string;
 }
 
-interface UserData {
+interface ItemDTO {
+  CARDAPIO_GRUPO: string;
+  ID_CARDAPIO: number;
+  CODIGO: string;
+  DESCRICAO: string;
+  PRECO: number;
+  GRUPO: string;
+  FOTO: string;
+  ARQUIVO_WEB: string;
+  DESCRICAO_PRATO: string;
+}
+
+interface ClienteDTO {
   id: number;
-  uuid: string;
-  name: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  type: string;
-  function_id: string;
-  building_id: string;
+  natureza: string;
+  nome_fantasia: string;
+  razao_social: string;
+  cnpj: string;
+  status: string;
+  imagem: string;
 }
-
-interface AccessData {
-  token: string;
-  user: string;
-}
-
-const signIn = async (dados: SignInFormData): Promise<AccessData> => {
-  const response = await api.get(`/users/${dados.email}/${dados.password}`);
-
-  const { user } = response.data;
-  const token = user.uuid;
-  localStorage.setItem('@KanBoo:token', token);
-  localStorage.setItem('@Kanboo:user', JSON.stringify(user));
-
-  // api.defaults.headers.authorization = `Bearer ${token}`;
-  return { token, user };
-};
 
 const Menu: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
   const history = useHistory();
 
-  const { apto } = useParams();
+  const { cliente_cname } = useParams();
 
-  const { user, updateUser } = useAuth();
+  const [busca, setBusca] = useState('');
+  const [grupo, setGrupo] = useState<GrupoDTO[]>([]);
+  const [itens, setItens] = useState<ItemDTO[]>([]);
+  const [itensBusca, setItensBusca] = useState<ItemDTO[]>([]);
 
-  const [cpf, setCpf] = useState('');
-  const [avatar, setAvatar] = useState(
-    'https://api.adorable.io/avatars/80/pamploni',
-  );
+  const [cliente, setCliente] = useState<ClienteDTO>();
 
-  const handleChangeCpf = (e: ChangeEvent<HTMLInputElement>) => {
-    setCpf(cpfMask(e.currentTarget.value));
+  const [selected, setSelected] = useState();
+
+  useEffect(() => {
+    api.get('/menuideal').then(resp => {
+      // console.log(resp.data);
+      const itensData: ItemDTO[] = resp.data;
+      /* const grupoData: string[] = [
+        ...new Set(itensData.map((it: ItemDTO) => it.CARDAPIO_GRUPO)),
+      ]; */
+      const grupoSetData = new Set(
+        itensData.map((it: ItemDTO) => it.CARDAPIO_GRUPO),
+      );
+
+      const grupoData: GrupoDTO[] = [];
+
+      grupoSetData.forEach(ite => {
+        grupoData.push({ grupo: ite.toLowerCase() });
+      });
+      setItens(itensData);
+      setItensBusca(itensData);
+      // console.log(grupoData);
+      setGrupo(grupoData);
+    });
+
+    api.get('/cliente').then(resp => {
+      setCliente(resp.data);
+    });
+  }, []);
+
+  const handleGrupoClick = (itemGrupo: string): void => {
+    setItensBusca(
+      itens
+        .filter(item => item.CARDAPIO_GRUPO === itemGrupo.toUpperCase())
+        .sort((a, b) => {
+          if (a.DESCRICAO < b.DESCRICAO) return -1;
+          if (a.DESCRICAO > b.DESCRICAO) return 1;
+          return 0;
+        }),
+    );
   };
 
-  const handleSubmit = useCallback(
-    async (data: SignInFormData) => {
-      try {
-        formRef.current?.setErrors({});
-
-        const schema = Yup.object().shape({
-          email: Yup.string()
-            .required('E-mail obrigatório')
-            .email('Digite e-mail válido.'),
-          password: Yup.string().required('Senha obrigatória.'),
-        });
-
-        await schema.validate(data, {
-          abortEarly: false,
-        });
-
-        await signIn({ email: data.email, password: data.password }).then(
-          resp => {
-            console.log(resp);
-
-            addToast({
-              type: 'success',
-              title: 'Login realizado',
-              description: 'Login realizado com sucesso',
-            });
-
-            history.push('dashboard');
-          },
-        );
-
-        // history.push('/');
-      } catch (err) {
-        if (err instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(err);
-          formRef.current?.setErrors(errors);
-          return;
-        }
-
-        addToast({
-          type: 'error',
-          title: 'Erro na Cadastro',
-          description: 'Ocorreu um erro ao tentar realizar um novo cadastro.',
-        });
-      }
-    },
-    [addToast, history],
-  );
-
-  const handleAvatarchange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files) {
-        const data = new FormData();
-        data.append('avatar', e.target.files[0]);
-
-        api.patch('/uploads', data).then(response => {
-          // updateUser(response.data);
-
-          setAvatar(response.data.recebido);
-          addToast({
-            type: 'success',
-            title: 'Avatar atualizado',
-          });
-        });
-      }
-    },
-    [addToast],
-  );
+  const handlePesquisar = (e: ChangeEvent<HTMLInputElement>): void => {
+    setBusca(e.target.value);
+    console.log(e.target.value);
+    setItensBusca(
+      itens
+        .filter(item => item.DESCRICAO.includes(e.target.value.toUpperCase()))
+        .sort((a, b) => {
+          if (a.DESCRICAO < b.DESCRICAO) return -1;
+          if (a.DESCRICAO > b.DESCRICAO) return 1;
+          return 0;
+        }),
+    );
+  };
 
   return (
     <>
       <Header>
-        <img src={logoImg} alt="Kanboo" />
-        <span>
-          Olá, senhor Condômino. Utilize suas credenciais para acessar a
-          plataforma
-        </span>
+        <Form ref={formRef} onSubmit={() => {}}>
+          <Input
+            name="busca"
+            icon={FiSearch}
+            type="text"
+            placeholder="pesquise pelo seu item aqui..."
+            value={busca}
+            onChange={handlePesquisar}
+          />
+        </Form>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            overflow: 'hidden',
+            width: '100%',
+            backgroundColor: '#1a57ca',
+          }}
+        >
+          <GridList
+            style={{
+              flexWrap: 'nowrap',
+              transform: 'translateZ(0)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            cellHeight={40}
+            spacing={2}
+          >
+            {grupo.map(item => (
+              <GridListTile key={item.grupo} cols={0.6} rows={1}>
+                <button
+                  type="button"
+                  onClick={() => handleGrupoClick(item.grupo)}
+                  style={{
+                    display: 'flex',
+                    borderRadius: 20,
+                    backgroundColor: '#f4f4f4',
+
+                    height: 36,
+                    paddingLeft: 4,
+                    paddingRight: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 95,
+                  }}
+                >
+                  <span
+                    style={{
+                      color: '#1a57ca',
+                      fontFamily: 'Roboto',
+                      fontSize: 14,
+                      fontWeight: 700,
+                      textAlign: 'center',
+                      lineHeight: 1,
+                    }}
+                  >
+                    <strong>{item.grupo}</strong>
+                  </span>
+                </button>
+              </GridListTile>
+            ))}
+          </GridList>
+        </div>
       </Header>
       <Container>
         <Content>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '95vw',
+              height: 160,
+              marginTop: 10,
+              marginLeft: 4,
+              alignItems: 'flex-start',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                fontWeight: 600,
+                color: '#fff',
+                marginBottom: 4,
+                marginLeft: 16,
+                zIndex: 2,
+                textAlign: 'left',
+                verticalAlign: 'bottom',
+              }}
+            >
+              {' '}
+              {cliente ? cliente.nome_fantasia : 'Nome do Restaurante'}
+            </span>
+            <span
+              style={{
+                fontFamily: 'Roboto',
+                fontSize: 13,
+                fontWeight: 400,
+                fontStyle: 'italic',
+                color: '#bbb',
+                marginBottom: 16,
+                marginLeft: 16,
+                zIndex: 2,
+                textAlign: 'left',
+                verticalAlign: 'bottom',
+              }}
+            >
+              {' '}
+              {cliente ? cliente.natureza : 'Natureza'}
+            </span>
+            <div
+              style={{
+                display: 'flex',
+                position: 'absolute',
+                width: '95vw',
+                height: 160,
+                backgroundColor: '#000',
+                opacity: 0.5,
+              }}
+            />
+            <img
+              src={imgBck}
+              alt="empresa"
+              style={{
+                width: '95vw',
+                height: 160,
+                objectFit: 'fill',
+                zIndex: -1,
+                position: 'absolute',
+              }}
+            />
+          </div>
           <AnimationContainer>
-            <Form ref={formRef} onSubmit={handleSubmit}>
-              <h1>Digite dados de acesso</h1>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                flexDirection: 'column',
+                width: '100%',
+                paddingTop: 16,
+              }}
+            />
+            <GridList
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                transform: 'translateZ(0)',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                paddingLeft: 3,
+                paddingRight: 3,
+              }}
+              cellHeight={110}
+              spacing={2}
+            >
+              {itensBusca.map(item => (
+                <GridListTile key={item.ID_CARDAPIO} cols={2} rows={1}>
+                  <div
+                    style={{
+                      height: 100,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      width: '98vw',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      paddingLeft: 3,
+                      paddingRight: 3,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '97%',
+                        height: '100%',
+                        boxShadow: '2px 2px 4px #999',
+                        backgroundColor: '#f4f4f4',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          msFlexDirection: 'row',
+                          alignItems: 'baseline',
+                          justifyContent: 'space-between',
+                          width: '97%',
+                        }}
+                      >
+                        <h1
+                          style={{
+                            fontFamily: 'Roboto',
+                            fontSize: 13,
+                            fontWeight: 600,
+                            color: '#000',
+                            marginLeft: 10,
+                            marginTop: 10,
+                          }}
+                        >
+                          {item.CODIGO}
+                          {' - '}
+                          {item.DESCRICAO}
+                        </h1>
+                        <h2
+                          style={{
+                            fontFamily: 'Roboto',
+                            fontSize: 12,
+                            fontWeight: 500,
+                            fontStyle: 'italic',
+                            color: '#1a57ca',
+                            marginLeft: 16,
+                            marginTop: 4,
+                            textAlign: 'right',
+                          }}
+                        >
+                          (
+{' '}
+{item.CARDAPIO_GRUPO.toLowerCase()})
+                        </h2>
+                      </div>
+                      <h2
+                        style={{
+                          fontFamily: 'Roboto',
+                          fontSize: 13,
+                          fontWeight: 500,
+                          color: '#999',
+                          marginLeft: 32,
+                          marginTop: 8,
+                        }}
+                      >
+                        Prato tradicional da casa, preparado com ervas finas,
+                        proteína e especiarias frescas (30 min. preparo)
+                      </h2>
+                      <h1
+                        style={{
+                          fontFamily: 'Roboto',
+                          fontSize: 17,
+                          fontWeight: 700,
+                          color: '#ff3000',
 
-              <Input
-                type="email"
-                name="email"
-                icon={FiMail}
-                placeholder="email"
-              />
-              <Input
-                name="password"
-                icon={FiLock}
-                type="password"
-                placeholder="Senha"
-              />
-              <Button type="submit">Acessar</Button>
-            </Form>
+                          position: 'absolute',
+                          bottom: 16,
+                          right: 16,
+                          width: '100%',
+                          textAlign: 'right',
+                        }}
+                      >
+                        {formatValue(item.PRECO)}
+                      </h1>
+                    </div>
+                  </div>
+                </GridListTile>
+              ))}
+            </GridList>
           </AnimationContainer>
         </Content>
       </Container>

@@ -11,20 +11,36 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.div`
-  background-color: #06039a;
-  height: 24vh;
-
+  background-color: #1a57ca;
+  height: 130px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
 
-  img {
-    width: 80px;
-    height: 100px;
-    resize: contain;
-    margin-bottom: 12px;
+  form {
+    margin: 20px 0;
+    width: 90%;
+    text-align: center;
+
+    h1 {
+      margin-bottom: 24px;
+      font-size: 20px;
+      color: #06039a;
+    }
+
+    a {
+      color: #f4ede8;
+      display: block;
+      margin-top: 24px;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: ${shade(0.2, '#f4ede8')};
+      }
+    }
   }
 
   span {
@@ -40,7 +56,7 @@ export const Content = styled.div`
   justify-content: center;
 
   width: 100%;
-  max-width: 700px;
+
   align-items: center;
 `;
 
@@ -62,30 +78,6 @@ export const AnimationContainer = styled.div`
   justify-content: center;
 
   animation: ${appearFromRight} 1s;
-
-  form {
-    margin: 80px 0;
-    width: 340px;
-    text-align: center;
-
-    h1 {
-      margin-bottom: 24px;
-      font-size: 20px;
-      color: #06039a;
-    }
-
-    a {
-      color: #f4ede8;
-      display: block;
-      margin-top: 24px;
-      text-decoration: none;
-      transition: color 0.2s;
-
-      &:hover {
-        color: ${shade(0.2, '#f4ede8')};
-      }
-    }
-  }
 
   > a {
     color: #ff9000;

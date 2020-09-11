@@ -13,6 +13,7 @@ import Menu from '../pages/Menu';
 import CondonMenu from '../pages/CondonMenu';
 import Agendamento from '../pages/Agendamento';
 import Registrar from '../pages/Registrar';
+import SignUp from '../pages/SignUp';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -22,6 +23,7 @@ const Routes: React.FC = () => (
     <Route path="/condon-menu/:apto" component={CondonMenu} />
     <Route path="/condon-agend/:apto" component={Agendamento} />
     <Route path="/visit-form/:visita_uid" component={VisitForm} />
+    <Route path="/signup/:apto_uid" component={SignUp} />
 
     <Route path="/forgot-password" component={ForgotPassword} />
     <Route path="/reset-password" component={ResetPassword} />
