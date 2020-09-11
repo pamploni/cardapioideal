@@ -5,7 +5,7 @@ import axios from 'axios';
 }); */
 
 const api = axios.create({
-  baseURL: 'www.menuideal.com.br:5555',
+  baseURL: 'http://ec2-35-153-57-160.compute-1.amazonaws.com:5555',
 });
 
 export default api;

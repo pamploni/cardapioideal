@@ -54,10 +54,7 @@ export const Content = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   width: 100%;
-
-  align-items: center;
 `;
 
 const appearFromRight = keyframes`
@@ -76,7 +73,6 @@ export const AnimationContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   animation: ${appearFromRight} 1s;
 
   > a {

@@ -219,7 +219,7 @@ const Menu: React.FC = () => {
               display: 'flex',
               flexDirection: 'column',
               width: '95vw',
-              height: 160,
+              height: '160px',
               marginTop: 10,
               marginLeft: 4,
               alignItems: 'flex-start',
@@ -234,9 +234,10 @@ const Menu: React.FC = () => {
                 color: '#fff',
                 marginBottom: 4,
                 marginLeft: 16,
-                zIndex: 2,
+
                 textAlign: 'left',
                 verticalAlign: 'bottom',
+                zIndex: 3,
               }}
             >
               {' '}
@@ -251,7 +252,8 @@ const Menu: React.FC = () => {
                 color: '#bbb',
                 marginBottom: 16,
                 marginLeft: 16,
-                zIndex: 2,
+
+                zIndex: 3,
                 textAlign: 'left',
                 verticalAlign: 'bottom',
               }}
@@ -259,14 +261,15 @@ const Menu: React.FC = () => {
               {' '}
               {cliente ? cliente.natureza : 'Natureza'}
             </span>
+
             <div
               style={{
-                display: 'flex',
                 position: 'absolute',
                 width: '95vw',
-                height: 160,
+                height: '160px',
                 backgroundColor: '#000',
                 opacity: 0.5,
+                zIndex: 1,
               }}
             />
             <img
@@ -274,23 +277,22 @@ const Menu: React.FC = () => {
               alt="empresa"
               style={{
                 width: '95vw',
-                height: 160,
+                height: '160px',
                 objectFit: 'fill',
-                zIndex: -1,
                 position: 'absolute',
               }}
             />
           </div>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              flexDirection: 'column',
+              width: '100%',
+              paddingTop: 16,
+            }}
+          />
           <AnimationContainer>
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                flexDirection: 'column',
-                width: '100%',
-                paddingTop: 16,
-              }}
-            />
             <GridList
               style={{
                 display: 'flex',
