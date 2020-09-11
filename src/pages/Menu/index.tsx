@@ -172,6 +172,7 @@ const Menu: React.FC = () => {
               transform: 'translateZ(0)',
               alignItems: 'center',
               justifyContent: 'center',
+              width: '100vw',
             }}
             cellHeight={40}
             spacing={2}
@@ -185,13 +186,12 @@ const Menu: React.FC = () => {
                     display: 'flex',
                     borderRadius: 20,
                     backgroundColor: '#f4f4f4',
-
                     height: 36,
                     paddingLeft: 4,
                     paddingRight: 4,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 95,
+                    width: 105,
                   }}
                 >
                   <span
@@ -202,6 +202,7 @@ const Menu: React.FC = () => {
                       fontWeight: 700,
                       textAlign: 'center',
                       lineHeight: 1,
+                      width: 88,
                     }}
                   >
                     <strong>{item.grupo}</strong>
