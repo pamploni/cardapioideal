@@ -104,10 +104,28 @@ const Menu: React.FC = () => {
         grupoSetData.forEach(ite => {
           grupoData.push({ grupo: ite.toLowerCase() });
         });
-        setItens(itensData);
-        setItensBusca(itensData);
+        setItens(
+          itensData.sort((a, b) => {
+            if (a.DESCRICAO < b.DESCRICAO) return -1;
+            if (a.DESCRICAO > b.DESCRICAO) return 1;
+            return 0;
+          }),
+        );
+        setItensBusca(
+          itensData.sort((a, b) => {
+            if (a.DESCRICAO < b.DESCRICAO) return -1;
+            if (a.DESCRICAO > b.DESCRICAO) return 1;
+            return 0;
+          }),
+        );
         // console.log(grupoData);
-        setGrupo(grupoData);
+        setGrupo(
+          grupoData.sort((a, b) => {
+            if (a.grupo < b.grupo) return -1;
+            if (a.grupo > b.grupo) return 1;
+            return 0;
+          }),
+        );
       });
 
       api.get('/cliente').then(resp => {
@@ -162,7 +180,7 @@ const Menu: React.FC = () => {
             justifyContent: 'space-around',
             alignItems: 'center',
             overflow: 'hidden',
-            width: '100%',
+            width: '95%',
             backgroundColor: '#1a57ca',
           }}
         >
@@ -170,12 +188,10 @@ const Menu: React.FC = () => {
             style={{
               flexWrap: 'nowrap',
               transform: 'translateZ(0)',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100vw',
+              width: '100%',
             }}
             cellHeight={40}
-            spacing={2}
+            spacing={1}
           >
             {grupo.map(item => (
               <GridListTile key={item.grupo} cols={0.6} rows={1}>
@@ -315,7 +331,7 @@ const Menu: React.FC = () => {
                       height: 100,
                       display: 'flex',
                       flexDirection: 'column',
-                      width: '98vw',
+                      width: '100vw',
                       alignItems: 'center',
                       justifyContent: 'center',
                       paddingLeft: 3,
@@ -380,10 +396,13 @@ const Menu: React.FC = () => {
                           color: '#999',
                           marginLeft: 32,
                           marginTop: 8,
+                          width: '90%',
                         }}
                       >
-                        Prato tradicional da casa, preparado com ervas finas,
-                        proteína e especiarias frescas (30 min. preparo)
+                        {item.DESCRICAO_PRATO !== 'None'
+                          ? item.DESCRICAO_PRATO
+                          : `Item disponível na casa, para sua apreciação. Caso tenha
+                        alguma dúvida, procure um de nossos garçons.`}
                       </h2>
                       <h1
                         style={{
