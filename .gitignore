@@ -10,6 +10,8 @@
 
 # production
 /build
+/utils/apiClient copy.ts
+/services/api copy.ts
 
 # misc
 .DS_Store

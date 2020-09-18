@@ -4,33 +4,12 @@ import { Switch } from 'react-router-dom';
 
 import Route from './Route';
 
-import ForgotPassword from '../pages/ForgotPassword';
-import ResetPassword from '../pages/ResetPassword';
-import Dashboard from '../pages/Dashboard';
-import Profile from '../pages/Profile';
-import VisitForm from '../pages/VisitForm';
 import Menu from '../pages/Menu';
-import CondonMenu from '../pages/CondonMenu';
-import Agendamento from '../pages/Agendamento';
-import Registrar from '../pages/Registrar';
-import SignUp from '../pages/SignUp';
 
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/" exact component={Menu} />
     <Route path="/menu/:cliente_cname" component={Menu} />
-    <Route path="/registrar" component={Registrar} />
-
-    <Route path="/condon-menu/:apto" component={CondonMenu} />
-    <Route path="/condon-agend/:apto" component={Agendamento} />
-    <Route path="/visit-form/:visita_uid" component={VisitForm} />
-    <Route path="/signup/:apto_uid" component={SignUp} />
-
-    <Route path="/forgot-password" component={ForgotPassword} />
-    <Route path="/reset-password" component={ResetPassword} />
-
-    <Route path="/profile" component={Profile} isPrivate />
-    <Route path="/dashboard" component={Dashboard} />
   </Switch>
 );
 

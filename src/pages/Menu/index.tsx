@@ -23,8 +23,6 @@ import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import api from '../../services/api';
-import { useToast } from '../../hooks/toast';
-import { useAuth } from '../../hooks/auth';
 
 import { cpfMask, formatValue } from '../../utils/formatValue';
 
@@ -33,7 +31,6 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import imgBck from '../../assets/imgBck.jpeg';
 
 import Input from '../../components/Input';
-import Button from '../../components/Button';
 
 import {
   Container,
@@ -71,8 +68,6 @@ interface ClienteDTO {
 
 const Menu: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const { addToast } = useToast();
-  const history = useHistory();
 
   const { cliente_cname } = useParams();
 
