@@ -12,7 +12,7 @@ export const Container = styled.div<ContainerProps>`
   background: #fff;
   border-radius: 10px;
 
-  padding: 10px;
+  padding: 9px;
   width: 100%;
 
   border: 2px solid #06039a;
@@ -51,6 +51,7 @@ export const Container = styled.div<ContainerProps>`
     background: transparent;
     border: 0;
     color: #06039a;
+    font-family: "Nunito";
 
     &::placeholder {
       color: #666360;

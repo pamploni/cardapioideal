@@ -157,13 +157,82 @@ const Menu: React.FC = () => {
 
   return (
     <>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100vw',
+          height: '160px',
+          marginTop: 0,
+          marginLeft: 0,
+          alignItems: 'flex-start',
+          justifyContent: 'flex-end',
+        }}
+      >
+        <span
+          style={{
+            fontFamily: 'Nunito',
+            fontSize: 16,
+            fontWeight: 800,
+            color: '#fff',
+            marginBottom: -6,
+            marginLeft: 16,
+            fontStyle: 'italic',
+            textAlign: 'left',
+            verticalAlign: 'bottom',
+            zIndex: 3,
+          }}
+        >
+          {' '}
+          {cliente ? cliente.nome_fantasia : 'Nome do Restaurante'}
+        </span>
+        <span
+          style={{
+            fontFamily: 'Nunito',
+            fontSize: 14,
+            fontWeight: 500,
+            fontStyle: 'italic',
+            color: '#bbb',
+            marginBottom: 32,
+            marginLeft: 16,
+
+            zIndex: 3,
+            textAlign: 'left',
+            verticalAlign: 'bottom',
+          }}
+        >
+          {' '}
+          {cliente ? cliente.natureza.toLowerCase() : 'Natureza'}
+        </span>
+
+        <div
+          style={{
+            position: 'absolute',
+            width: '100vw',
+            height: '160px',
+            backgroundColor: '#000',
+            opacity: 0.5,
+            zIndex: 1,
+          }}
+        />
+        <img
+          src={imgBck}
+          alt="empresa"
+          style={{
+            width: '100vw',
+            height: '160px',
+            objectFit: 'cover',
+            position: 'absolute',
+          }}
+        />
+      </div>
       <Header>
         <Form ref={formRef} onSubmit={() => {}}>
           <Input
             name="busca"
             icon={FiSearch}
             type="text"
-            placeholder="pesquise pelo seu item aqui..."
+            placeholder="pesquise pelo seu prato aqui..."
             value={busca}
             onChange={handlePesquisar}
           />
@@ -175,7 +244,7 @@ const Menu: React.FC = () => {
             justifyContent: 'space-around',
             alignItems: 'center',
             overflow: 'hidden',
-            width: '95%',
+            width: '98%',
             backgroundColor: '#1a57ca',
           }}
         >
@@ -195,7 +264,8 @@ const Menu: React.FC = () => {
                   onClick={() => handleGrupoClick(item.grupo)}
                   style={{
                     display: 'flex',
-                    borderRadius: 20,
+                    fontFamily: 'Nunito',
+                    borderRadius: 5,
                     backgroundColor: '#f4f4f4',
                     height: 36,
                     paddingLeft: 4,
@@ -208,11 +278,11 @@ const Menu: React.FC = () => {
                   <span
                     style={{
                       color: '#1a57ca',
-                      fontFamily: 'Roboto',
-                      fontSize: 14,
-                      fontWeight: 700,
+                      fontFamily: 'Nunito',
+                      fontSize: 18,
+                      fontWeight: 500,
                       textAlign: 'center',
-                      lineHeight: 1,
+                      lineHeight: 0.8,
                       width: 88,
                     }}
                   >
@@ -226,75 +296,6 @@ const Menu: React.FC = () => {
       </Header>
       <Container>
         <Content>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '95vw',
-              height: '160px',
-              marginTop: 10,
-              marginLeft: 4,
-              alignItems: 'flex-start',
-              justifyContent: 'flex-end',
-            }}
-          >
-            <span
-              style={{
-                fontFamily: 'Roboto',
-                fontSize: 16,
-                fontWeight: 600,
-                color: '#fff',
-                marginBottom: 4,
-                marginLeft: 16,
-
-                textAlign: 'left',
-                verticalAlign: 'bottom',
-                zIndex: 3,
-              }}
-            >
-              {' '}
-              {cliente ? cliente.nome_fantasia : 'Nome do Restaurante'}
-            </span>
-            <span
-              style={{
-                fontFamily: 'Roboto',
-                fontSize: 13,
-                fontWeight: 400,
-                fontStyle: 'italic',
-                color: '#bbb',
-                marginBottom: 16,
-                marginLeft: 16,
-
-                zIndex: 3,
-                textAlign: 'left',
-                verticalAlign: 'bottom',
-              }}
-            >
-              {' '}
-              {cliente ? cliente.natureza : 'Natureza'}
-            </span>
-
-            <div
-              style={{
-                position: 'absolute',
-                width: '95vw',
-                height: '160px',
-                backgroundColor: '#000',
-                opacity: 0.5,
-                zIndex: 1,
-              }}
-            />
-            <img
-              src={imgBck}
-              alt="empresa"
-              style={{
-                width: '95vw',
-                height: '160px',
-                objectFit: 'fill',
-                position: 'absolute',
-              }}
-            />
-          </div>
           <div
             style={{
               display: 'flex',
@@ -316,17 +317,17 @@ const Menu: React.FC = () => {
                 paddingLeft: 3,
                 paddingRight: 3,
               }}
-              cellHeight={110}
+              cellHeight={150}
               spacing={2}
             >
               {itensBusca.map(item => (
                 <GridListTile key={item.ID_CARDAPIO} cols={2} rows={1}>
                   <div
                     style={{
-                      height: 100,
+                      height: 144,
                       display: 'flex',
                       flexDirection: 'column',
-                      width: '100vw',
+                      width: '98vw',
                       alignItems: 'center',
                       justifyContent: 'center',
                       paddingLeft: 3,
@@ -346,7 +347,7 @@ const Menu: React.FC = () => {
                       <div
                         style={{
                           display: 'flex',
-                          msFlexDirection: 'row',
+                          flexDirection: 'column',
                           alignItems: 'baseline',
                           justifyContent: 'space-between',
                           width: '97%',
@@ -354,12 +355,13 @@ const Menu: React.FC = () => {
                       >
                         <h1
                           style={{
-                            fontFamily: 'Roboto',
-                            fontSize: 13,
-                            fontWeight: 600,
+                            fontFamily: 'Nunito',
+                            fontSize: 12,
+                            fontWeight: 700,
                             color: '#000',
                             marginLeft: 10,
                             marginTop: 10,
+                            maxWidth: 360,
                           }}
                         >
                           {item.CODIGO}
@@ -368,13 +370,13 @@ const Menu: React.FC = () => {
                         </h1>
                         <h2
                           style={{
-                            fontFamily: 'Roboto',
+                            fontFamily: 'Nunito',
                             fontSize: 12,
                             fontWeight: 500,
                             fontStyle: 'italic',
                             color: '#1a57ca',
-                            marginLeft: 16,
-                            marginTop: 4,
+                            marginLeft: 48,
+
                             textAlign: 'right',
                           }}
                         >
@@ -383,34 +385,35 @@ const Menu: React.FC = () => {
 {item.CARDAPIO_GRUPO.toLowerCase()})
                         </h2>
                       </div>
-                      <h2
+                      <p
                         style={{
-                          fontFamily: 'Roboto',
+                          textAlign: 'justify',
+                          fontFamily: 'Nunito',
                           fontSize: 13,
                           fontWeight: 500,
                           color: '#999',
-                          marginLeft: 32,
+                          marginLeft: 48,
                           marginTop: 8,
-                          width: '90%',
+                          width: '82%',
                         }}
                       >
                         {item.DESCRICAO_PRATO !== 'None'
                           ? item.DESCRICAO_PRATO
                           : `Item disponível na casa, para sua apreciação. Caso tenha
                         alguma dúvida, procure um de nossos garçons.`}
-                      </h2>
+                      </p>
                       <h1
                         style={{
-                          fontFamily: 'Roboto',
-                          fontSize: 17,
-                          fontWeight: 700,
+                          fontFamily: 'Nunito',
+                          fontSize: 16,
+                          fontWeight: 800,
                           color: '#ff3000',
-
                           position: 'absolute',
-                          bottom: 16,
-                          right: 16,
-                          width: '100%',
+                          bottom: 18,
+                          right: 18,
+                          width: '95%',
                           textAlign: 'right',
+                          paddingRight: 8,
                         }}
                       >
                         {formatValue(item.PRECO)}

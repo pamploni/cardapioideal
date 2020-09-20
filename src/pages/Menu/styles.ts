@@ -11,7 +11,7 @@ export const Container = styled.div`
 
 export const Header = styled.div`
   background-color: #1a57ca;
-  height: 130px;
+  height: 110px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,8 +19,8 @@ export const Header = styled.div`
   width: 100%;
 
   form {
-    margin: 20px 0;
-    width: 90%;
+    margin: 10px 0;
+    width: 95%;
     text-align: center;
 
     h1 {
@@ -44,7 +44,7 @@ export const Header = styled.div`
 
   span {
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
   }
 `;
 
