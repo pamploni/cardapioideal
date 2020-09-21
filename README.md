@@ -27,4 +27,4 @@ Neste [endereço](http://www.menuideal.com.br/menu/marujobar) poderá ver um exe
 
 ## Dúvidas, sugestões ou contribuições
 
- Entre em contato conosco pelo [e-mail](pamploni@plsoft.com.br)
+ Entre em contato conosco pelo [e-mail](mailto:pamploni@plsoft.com.br)
