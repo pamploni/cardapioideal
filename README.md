@@ -1,4 +1,4 @@
-# Menu Ideal
+# Cardápio Ideal
 
   Esse projeto tem o objetivo de ajudar desenvolvedores e proprietários de bares e restaurantes, se colocando (a princípio) como uma alternativa simples de cardápio (catálogo) digital.
 
